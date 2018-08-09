@@ -31,6 +31,12 @@ namespace WpfQiangdan
 
             listView.MouseDoubleClick += listView_MouseDoubleClick;
 
+            Bmob.auth(Bmob.bmob_admin, () => {
+             Dispatcher.Invoke(()=> {
+                  Application.Current.Shutdown();
+              });
+            });
+
         }
 
         private void listView_MouseDoubleClick(object sender, MouseButtonEventArgs e)
