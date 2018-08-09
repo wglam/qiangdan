@@ -95,7 +95,11 @@ namespace WpfQiangdan.net
                 param.Add("payType", "3");
 
                 HttpWebResponse response = Http.post(host + "api/v3/order/generateOrder", Sign.sign(param));
-                Response<object> data = jsonHttpWebResponse<object>(response);
+                 string body;
+                Response<object> data = jsonHttpWebResponse<object>(response,out body);
+                if (data.code == 0) {
+                    Bmob.update(body);
+                }
                 return data.code == 0;
             }
             catch (Exception)
@@ -189,6 +193,32 @@ namespace WpfQiangdan.net
             }
             catch (Exception e)
             {
+                return Response<T>.error(-1, "http error code: " + e.Message);
+
+            }
+        }
+
+        public static Response<T> jsonHttpWebResponse<T>(HttpWebResponse response,out string body)
+        {
+            try
+            {
+                if (response.StatusCode == HttpStatusCode.OK)
+                {
+                    using (StreamReader reader = new StreamReader(response.GetResponseStream(), Encoding.UTF8))
+                    {
+                        body = reader.ReadToEnd();
+                        return JsonConvert.DeserializeObject<Response<T>>(body);
+                    }
+                }
+                else
+                {
+                    body = "";
+                    return Response<T>.error(-1, "http error code: " + response.StatusCode);
+                }
+            }
+            catch (Exception e)
+            {
+                body = "";
                 return Response<T>.error(-1, "http error code: " + e.Message);
 
             }

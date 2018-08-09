@@ -84,6 +84,7 @@
     <Compile Include="bean\PersonalData.cs" />
     <Compile Include="bean\User.cs" />
     <Compile Include="Bmob.cs" />
+    <Compile Include="BmobData.cs" />
     <Compile Include="BmobUser.cs" />
     <Compile Include="db\DbValue.cs" />
     <Compile Include="net\call\GoodsCall.cs" />

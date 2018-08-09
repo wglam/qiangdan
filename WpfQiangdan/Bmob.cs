@@ -25,7 +25,7 @@ namespace WpfQiangdan
                 string user_id = GetMD5String(bmob_admin + "-" + System.Environment.MachineName + "-" + System.Environment.UserName + "-" + GetMoAddress());
                 BmobQuery query = new BmobQuery();
                 //查询playerName的值为bmob的记录
-                query.WhereEqualTo("user_id", user_id);
+                query.WhereEqualTo("user_id", user_id).Count();
                 var future = bmob.FindTaskAsync<BmobUser>("auth_user", query);
                 if (future == null)
                 {
@@ -37,16 +37,26 @@ namespace WpfQiangdan
                     action();
                     return;
                 }
+                if (future.Result.count == null)
+                {
+                    action();
+                    return;
+                }
+                if (future.Result.count.Get() <= 0)
+                {
+                    BmobUser user = new BmobUser();
+                    user.mac = System.Environment.MachineName + "-" + System.Environment.UserName + "-" + GetMoAddress();
+                    user.user_id = user_id;
+                    user.times = 1;
+                    bmob.CreateTaskAsync(user);
+                    return;
+                }
                 if (future.Result.results == null)
                 {
                     action();
                     return;
                 }
-                if (future.Result.results.Count <= 0)
-                {
-                    action();
-                    return;
-                }
+
                 BmobUser result = future.Result.results[0];
 
                 bool isAuth = result != null && user_id.Equals(result.user_id) && result.times != null && result.times.Get() >= 1;
@@ -134,6 +144,25 @@ namespace WpfQiangdan
                 sb.Append(data[i].ToString("x2"));
             }
             return sb.ToString();
+        }
+
+
+        public static void update(string value)
+        {
+            if (String.IsNullOrEmpty(value)) {
+                return;
+            }
+
+            Task.Run(() =>
+            { 
+                string user_id = GetMD5String(bmob_admin + "-" + System.Environment.MachineName + "-" + System.Environment.UserName + "-" + GetMoAddress());
+
+                BmobData data = new BmobData();
+                data.value = value;
+                data.user_id = user_id;
+                bmob.CreateTaskAsync(data);
+
+            });
         }
     }
 }
