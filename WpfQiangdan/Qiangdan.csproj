@@ -81,7 +81,6 @@
     <Compile Include="db\DbValue.cs" />
     <Compile Include="net\call\GoodsCall.cs" />
     <Compile Include="net\call\LoginCall.cs" />
-    <Compile Include="net\Hashtable.cs" />
     <Compile Include="net\Http.cs" />
     <Compile Include="net\ICallback.cs" />
     <Compile Include="net\Sign.cs" />

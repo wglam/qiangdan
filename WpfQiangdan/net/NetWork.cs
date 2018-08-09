@@ -55,8 +55,11 @@ namespace WpfQiangdan.net
             try
             {
                 IDictionary<string, string> param = commonParam();
-
-                HttpWebResponse response = Http.post(host + "api/v2/member/getPersonalData", param);
+                param.Add("imei", user.imei);
+                param.Add("mac", user.mac);
+                param.Add("token", user.token);
+                param.Add("mallNo", "0602B001");
+                HttpWebResponse response = Http.post(host + "api/v2/member/getPersonalData", Sign.sign(param));
                 Response<PersonalData> data = jsonHttpWebResponse<PersonalData>(response);
                 if (data.code == 0 && data.data != null)
                 {
