@@ -80,7 +80,7 @@ namespace WpfQiangdan.db
             return users.Values;
         }
 
-        public static ICollection<User> getCheckedUser()
+        public static ICollection<User> getCheckedUser(bool checkToken)
         {
             List<User> ret = new List<User>();
             foreach (User user in users.Values)
@@ -88,14 +88,15 @@ namespace WpfQiangdan.db
 
                 if (user.isCheck)
                 {
-                    if (!String.IsNullOrWhiteSpace(user.token))
-                    {
-                        ret.Add(user);
-                    }
-                    else
+
+                    if (checkToken && String.IsNullOrWhiteSpace(user.token))
                     {
                         user.isCheck = false;
                         user.message = "没有获取到TOKEN";
+                    }
+                    else
+                    {
+                        ret.Add(user);
                     }
 
                 }

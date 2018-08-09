@@ -88,7 +88,7 @@ namespace WpfQiangdan
 
         private void getToken_Click(object sender, RoutedEventArgs e)
         {
-            foreach (User user in DbValue.getAllUser())
+            foreach (User user in DbValue.getCheckedUser(false))
             {
                 NetWork.loginUser(user);
             }
@@ -101,7 +101,7 @@ namespace WpfQiangdan
                 MessageBox.Show("未选择抢购商品，请在获取商品双击选择抢购商品!");
                 return;
             }
-            ICollection<User> users = DbValue.getCheckedUser();
+            ICollection<User> users = DbValue.getCheckedUser(true);
 
             if (users.Count <= 0)
             {
@@ -114,12 +114,12 @@ namespace WpfQiangdan
 
         private void stopWork_Click(object sender, RoutedEventArgs e)
         {
-            QiangdanWork.stop(DbValue.getCheckedUser());
+            QiangdanWork.stop(DbValue.getCheckedUser(true));
         }
 
         private void queryWork_Click(object sender, RoutedEventArgs e)
         {
-            NetWork.getPersonalDatas(DbValue.getCheckedUser());
+            NetWork.getPersonalDatas(DbValue.getCheckedUser(true));
         }
     }
 }
