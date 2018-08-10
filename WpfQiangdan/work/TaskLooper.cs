@@ -35,7 +35,7 @@ namespace WpfQiangdan.work
         public TaskLooper(int loopTime, string key, Action action)
             : this(key, action)
         {
-            this.LoopTime = loopTime;
+            this.LoopTime = loopTime <= 0 ? LoopTime : loopTime;
 
         }
         private void doTask()

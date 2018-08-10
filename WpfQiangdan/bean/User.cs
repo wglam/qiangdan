@@ -130,6 +130,10 @@ namespace WpfQiangdan.bean
                 {
                     return "抢购中...";
                 }
+                else if (_state == 2)
+                {
+                    return "已停止...";
+                }
                 else
                 {
                     return "";

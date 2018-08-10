@@ -23,6 +23,8 @@ namespace WpfQiangdan.db
 
         public static long dtime { get; set; }
 
+        public static int loopDelay { get; set; }
+
         private static IDictionary<string, User> users = new ConcurrentDictionary<string, User>();
 
         public static void add(User user)
@@ -89,7 +91,8 @@ namespace WpfQiangdan.db
                 if (user.isCheck)
                 {
 
-                    if (checkToken && String.IsNullOrWhiteSpace(user.token))
+                    ret.Add(user);
+                    /*if (checkToken && String.IsNullOrWhiteSpace(user.token))
                     {
                         user.isCheck = false;
                         user.message = "没有获取到TOKEN";
@@ -97,7 +100,7 @@ namespace WpfQiangdan.db
                     else
                     {
                         ret.Add(user);
-                    }
+                    }*/
 
                 }
 

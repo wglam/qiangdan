@@ -5,6 +5,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using WpfQiangdan.bean;
+using WpfQiangdan.db;
 using WpfQiangdan.net;
 
 namespace WpfQiangdan.work
@@ -18,11 +19,12 @@ namespace WpfQiangdan.work
             if (String.IsNullOrWhiteSpace(user.account)) return null;
             if (String.IsNullOrWhiteSpace(user.token)) return null;
 
-            return new TaskLooper(user.account, () =>
+            return new TaskLooper(DbValue.loopDelay,user.account, () =>
             {
                 if (NetWork.generateOrderBy(user))
                 {
                     user.state = 1;
+                    user.isCheck = false;
                     stop(user.account);
                 }
             });
@@ -63,8 +65,8 @@ namespace WpfQiangdan.work
                         if (taskLooper != null)
                         {
                             taskMap.Add(item.account, taskLooper);
-                            item.state = -1;
                             taskLooper.execute();
+                            item.state = -1;
                         }
                     }
                 }
@@ -89,7 +91,7 @@ namespace WpfQiangdan.work
                             {
                                 taskMap.Remove(item.account);
                                 task.cancelAll();
-                                item.state = 0;
+                                item.state = 2;
                             }
                         }
                         catch { 

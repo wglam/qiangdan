@@ -7,15 +7,15 @@
         <TabItem Header="获取商品" Name="table1">
             <DockPanel  Background="#FFE5E5E5" >
 
-        
+
                 <StackPanel  DockPanel.Dock="Top" Orientation="Horizontal">
                     <Button Content="刷新" Padding="5" Width="75" Click="Button_Click_1"/>
                     <Label MinWidth="350" Name="idLabel"/>
                 </StackPanel>
 
-                <ListView Name="listView" DockPanel.Dock="Bottom"  >
-                  
-                
+                <ListView  Name="listView" DockPanel.Dock="Bottom"  Height="635">
+
+
                     <ListView.View>
                         <GridView>
 

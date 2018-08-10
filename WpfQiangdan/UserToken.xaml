@@ -4,7 +4,7 @@
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
              mc:Ignorable="d" >
-    <StackPanel Orientation="Vertical">
+    <StackPanel Orientation="Vertical" >
         <StackPanel Orientation="Horizontal">
             <Button x:Name="importUsers" Content="导入" MinWidth="96" Click="importUsers_Click" Padding="5" Margin="5"/>
             <Button x:Name="getToken" Content="批量获取token" Padding="5" Margin="5"  MinWidth="96" Click="getToken_Click"/>
@@ -13,12 +13,14 @@
             <Button x:Name="startWork" Content="开始" Padding="5" Margin="5"  MinWidth="96" Click="startWork_Click" />
             <Button x:Name="stopWork" Content="停止" Padding="5" Margin="5" MinWidth="96" Click="stopWork_Click"/>
             <Button x:Name="queryWork" Content="查询抢单" Padding="5" Margin="5" MinWidth="96" Click="queryWork_Click" />
+            <Label Content="抢单延迟"/>
+            <TextBox x:Name="loopDelay" MinWidth="96"  />
         </StackPanel>
-        <ListView x:Name="userListView" >
+        <ListView x:Name="userListView" Height="635" >
             <ListView.View>
                 <GridView>
                     <GridViewColumn>
-                      
+
                         <GridViewColumn.CellTemplate>
                             <DataTemplate>
                                 <CheckBox x:Name="checkBox" IsChecked="{Binding Path=isCheck, Mode=OneWay}" Click="CheckBox_Click" Tag="{Binding Path=account}"/>
@@ -39,6 +41,5 @@
                 </GridView>
             </ListView.View>
         </ListView>
-
     </StackPanel>
 </UserControl>

@@ -66,6 +66,10 @@ namespace WpfQiangdan.net
                     user.waitConsume = data.data.waitConsume;
                     user.waitPay = data.data.waitPay;
                     user.message = "";
+                    if (user.waitPay >= 1)
+                    {
+                        user.isCheck = false;
+                    }
                 }
                 else
                 {

@@ -34,16 +34,20 @@ namespace WpfQiangdan
 
         private void importUsers_Click(object sender, RoutedEventArgs e)
         {
-            var openFileDialog = new Microsoft.Win32.OpenFileDialog()
+            Task.Run(() =>
             {
-                Filter = "Excel Files (*.txt)|*.txt"
-            };
-            var result = openFileDialog.ShowDialog();
-            if (result == true)
-            {
-                var filename = openFileDialog.FileName;
-                Read(filename);
-            }
+                DbValue.checkAllUser();
+                var openFileDialog = new Microsoft.Win32.OpenFileDialog()
+                {
+                    Filter = "Excel Files (*.txt)|*.txt"
+                };
+                var result = openFileDialog.ShowDialog();
+                if (result == true)
+                {
+                    var filename = openFileDialog.FileName;
+                    Read(filename);
+                }
+            });
         }
 
         private void Read(string path)
@@ -65,7 +69,12 @@ namespace WpfQiangdan
                 }
 
             }
-            userListView.ItemsSource = DbValue.getUsersObservable();
+            this.userListView.Dispatcher.Invoke(new Action(delegate
+            {
+                userListView.ItemsSource = DbValue.getUsersObservable();
+
+            }));
+         
         }
 
 
@@ -96,6 +105,14 @@ namespace WpfQiangdan
 
         private void startWork_Click(object sender, RoutedEventArgs e)
         {
+            try
+            {
+                string delay = loopDelay.Text;
+                DbValue.loopDelay = Int32.Parse(delay);
+            }
+            catch
+            {
+            }
             if (String.IsNullOrWhiteSpace(DbValue.gbid))
             {
                 MessageBox.Show("未选择抢购商品，请在获取商品双击选择抢购商品!");
