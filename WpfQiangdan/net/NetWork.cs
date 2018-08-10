@@ -36,12 +36,21 @@ namespace WpfQiangdan.net
             param.Add("mallNo", "0602B001");
             get(host + "api/v2/groupbuy/flashsalelist", param, callback);
         }
+
+
+        public static void groupbuyinfo(string gbId, ICallback<GoodItem> callback)
+        {
+            IDictionary<string, string> param = commonParam();
+            param.Add("gbId", gbId);
+            get(host + "/api/v2/groupbuy/info", param, callback);
+        }
+
         public static void getPersonalDatas(ICollection<User> users)
         {
 
             foreach (User item in users)
             {
-                Task.Run(() => {getPersonalData(item); });
+                Task.Run(() => { getPersonalData(item); });
             }
 
         }
@@ -72,11 +81,12 @@ namespace WpfQiangdan.net
                 else
                 {
                     user.message = data.code + " -- " + data.message;
-                    if (data.code == 401) {
+                    if (data.code == 401)
+                    {
                         return;
                     }
                     getPersonalData(user);
-                  
+
                 }
             }
             catch (Exception e)

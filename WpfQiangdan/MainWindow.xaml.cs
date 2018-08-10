@@ -46,9 +46,7 @@ namespace WpfQiangdan
             string content = item.title + "   [  " + item.gbid + "  ]  ";
             MessageBoxResult result = MessageBox.Show(this, content, item.title, MessageBoxButton.OKCancel);
             if (result == MessageBoxResult.OK) {
-                idLabel.Content = content;
-                DbValue.gbid = item.gbid;
-                DbValue.type = item.type;
+                NetWork.groupbuyinfo(item.gbid, new GoodCall(idLabel));
             }
 
         }

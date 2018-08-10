@@ -49,10 +49,6 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
-    <Reference Include="Bmob-Windows, Version=1.5.2.0, Culture=neutral, processorArchitecture=MSIL">
-      <SpecificVersion>False</SpecificVersion>
-      <HintPath>lib\Bmob-Windows.dll</HintPath>
-    </Reference>
     <Reference Include="Newtonsoft.Json">
       <HintPath>..\packages\Newtonsoft.Json.4.0.8\lib\net40\Newtonsoft.Json.dll</HintPath>
     </Reference>
@@ -61,7 +57,7 @@
     <Reference Include="System" />
     <Reference Include="System.Data" />
     <Reference Include="System.Data.Services.Client" />
-  <Reference Include="System.Management" />
+    <Reference Include="System.Management" />
     <Reference Include="System.Deployment" />
     <Reference Include="System.Printing" />
     <Reference Include="System.Windows.Forms" />
@@ -84,6 +80,76 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </ApplicationDefinition>
+    <Compile Include="auth\api\Bmob.cs" />
+    <Compile Include="auth\api\Bmob.OO.cs" />
+    <Compile Include="auth\api\Bmob.Task.cs" />
+    <Compile Include="auth\api\BmobUnity.cs" />
+    <Compile Include="auth\api\BmobWindows.cs" />
+    <Compile Include="auth\api\BmobWindowsPhone.cs" />
+    <Compile Include="auth\api\IBmobAPI.cs" />
+    <Compile Include="auth\config\Configuration.cs" />
+    <Compile Include="auth\example\GameObject.cs" />
+    <Compile Include="auth\exception\BmobException.cs" />
+    <Compile Include="auth\Extensions\BmobObjectExtension.cs" />
+    <Compile Include="auth\Extensions\MiscExtensions.cs" />
+    <Compile Include="auth\http\BmobCommand.cs" />
+    <Compile Include="auth\http\BmobInteractionObject.cs" />
+    <Compile Include="auth\http\Http.cs" />
+    <Compile Include="auth\io\basic\BmobBoolean.cs" />
+    <Compile Include="auth\io\basic\BmobDouble.cs" />
+    <Compile Include="auth\io\basic\BmobInt.cs" />
+    <Compile Include="auth\io\basic\BmobLong.cs" />
+    <Compile Include="auth\io\basic\BmobNumber.cs" />
+    <Compile Include="auth\io\BmobACL.cs" />
+    <Compile Include="auth\io\BmobDate.cs" />
+    <Compile Include="auth\io\BmobFile.cs" />
+    <Compile Include="auth\io\BmobGeoPoint.cs" />
+    <Compile Include="auth\io\BmobInput.cs" />
+    <Compile Include="auth\io\BmobInstallation.cs" />
+    <Compile Include="auth\io\BmobKV.cs" />
+    <Compile Include="auth\io\BmobObject.cs" />
+    <Compile Include="auth\io\BmobOutput.cs" />
+    <Compile Include="auth\io\BmobPointer.cs" />
+    <Compile Include="auth\io\BmobQuery.cs" />
+    <Compile Include="auth\io\BmobRelation.cs" />
+    <Compile Include="auth\io\BmobRole.cs" />
+    <Compile Include="auth\io\BmobTable.cs" />
+    <Compile Include="auth\io\BmobTable2.cs" />
+    <Compile Include="auth\io\BmobUser.cs" />
+    <Compile Include="auth\io\IBmobOperator.cs" />
+    <Compile Include="auth\io\IBmobValue.cs" />
+    <Compile Include="auth\io\IBmobWritable.cs" />
+    <Compile Include="auth\io\operator\Add.cs" />
+    <Compile Include="auth\io\operator\AddRelation.cs" />
+    <Compile Include="auth\io\operator\AddUnique.cs" />
+    <Compile Include="auth\io\operator\Delete.cs" />
+    <Compile Include="auth\io\operator\Increment.cs" />
+    <Compile Include="auth\io\operator\Operate.cs" />
+    <Compile Include="auth\io\operator\Remove.cs" />
+    <Compile Include="auth\io\operator\RemoveRelation.cs" />
+    <Compile Include="auth\io\paramater\BmobBatch.cs" />
+    <Compile Include="auth\io\paramater\BmobLocalFile.cs" />
+    <Compile Include="auth\io\paramater\BmobRemote.cs" />
+    <Compile Include="auth\io\paramater\PushParamter.cs" />
+    <Compile Include="auth\io\paramater\SMSParamter.cs" />
+    <Compile Include="auth\io\paramater\ThumbnailParameter.cs" />
+    <Compile Include="auth\json\JsonAdapter.cs" />
+    <Compile Include="auth\json\SimpleJson.cs" />
+    <Compile Include="auth\json\SimpleJsonParser.cs" />
+    <Compile Include="auth\response\BmobResponseParser.cs" />
+    <Compile Include="auth\response\Create.cs" />
+    <Compile Include="auth\response\Delete.cs" />
+    <Compile Include="auth\response\Empty.cs" />
+    <Compile Include="auth\response\EndPoint.cs" />
+    <Compile Include="auth\response\Query.cs" />
+    <Compile Include="auth\response\SMS.cs" />
+    <Compile Include="auth\response\Status.cs" />
+    <Compile Include="auth\response\TimeStamp.cs" />
+    <Compile Include="auth\response\Update.cs" />
+    <Compile Include="auth\response\Upload.cs" />
+    <Compile Include="auth\tools\BmobArrays.cs" />
+    <Compile Include="auth\tools\BmobDebug.cs" />
+    <Compile Include="auth\tools\Utilities.cs" />
     <Compile Include="bean\GoodItem.cs" />
     <Compile Include="bean\AllGood.cs" />
     <Compile Include="bean\OrderBubbles.cs" />
@@ -95,6 +161,7 @@
     <Compile Include="db\DbValue.cs" />
     <Compile Include="net\call\GoodsCall.cs" />
     <Compile Include="net\call\LoginCall.cs" />
+    <Compile Include="net\call\GoodCall.cs" />
     <Compile Include="net\Http.cs" />
     <Compile Include="net\ICallback.cs" />
     <Compile Include="net\Sign.cs" />
@@ -167,9 +234,6 @@
     </BootstrapperPackage>
   </ItemGroup>
   <ItemGroup />
-  <ItemGroup>
-    <Content Include="lib\Bmob-Windows.dll" />
-  </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.

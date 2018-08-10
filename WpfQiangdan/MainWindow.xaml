@@ -4,7 +4,7 @@
         xmlns:local="clr-namespace:WpfQiangdan" x:Class="WpfQiangdan.MainWindow"
         Title="MainWindow" >
     <TabControl x:Name="TabControl1" >
-        <TabItem Header="获取商品" Name="table1">
+        <TabItem Header="限时秒杀" Name="table1">
             <DockPanel  Background="#FFE5E5E5" >
 
 
@@ -13,7 +13,7 @@
                     <Label MinWidth="350" Name="idLabel"/>
                 </StackPanel>
 
-                <ListView  Name="listView" DockPanel.Dock="Bottom"  Height="635">
+                <ListView  Name="listView" DockPanel.Dock="Bottom"  Height="635" >
 
 
                     <ListView.View>
