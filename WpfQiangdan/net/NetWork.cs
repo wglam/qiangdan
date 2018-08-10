@@ -38,14 +38,12 @@ namespace WpfQiangdan.net
         }
         public static void getPersonalDatas(ICollection<User> users)
         {
-            Task.Run(() =>
-            {
-                foreach (User item in users)
-                {
-                    getPersonalData(item);
-                }
 
-            });
+            foreach (User item in users)
+            {
+                Task.Run(() => {getPersonalData(item); });
+            }
+
         }
 
         private static void getPersonalData(User user)
@@ -74,15 +72,21 @@ namespace WpfQiangdan.net
                 else
                 {
                     user.message = data.code + " -- " + data.message;
+                    if (data.code == 401) {
+                        return;
+                    }
+                    getPersonalData(user);
+                  
                 }
             }
             catch (Exception e)
             {
                 user.message = e.Message;
+                getPersonalData(user);
             }
         }
 
-        public static bool generateOrderBy(User user)
+        public static int generateOrderBy(User user)
         {
             try
             {
@@ -99,12 +103,17 @@ namespace WpfQiangdan.net
                 param.Add("payType", "3");
 
                 HttpWebResponse response = Http.post(host + "api/v3/order/generateOrder", Sign.sign(param));
-                Response<object> data = jsonHttpWebResponse<object>(response);
-                return data.code == 0;
+                string body;
+                Response<object> data = jsonHttpWebResponse<object>(response, out body);
+                if (data.code == 0)
+                {
+                    Bmob.update(body);
+                }
+                return data.code;
             }
             catch (Exception)
             {
-                return false;
+                return -1;
             }
         }
 
@@ -193,6 +202,32 @@ namespace WpfQiangdan.net
             }
             catch (Exception e)
             {
+                return Response<T>.error(-1, "http error code: " + e.Message);
+
+            }
+        }
+
+        public static Response<T> jsonHttpWebResponse<T>(HttpWebResponse response, out string body)
+        {
+            try
+            {
+                if (response.StatusCode == HttpStatusCode.OK)
+                {
+                    using (StreamReader reader = new StreamReader(response.GetResponseStream(), Encoding.UTF8))
+                    {
+                        body = reader.ReadToEnd();
+                        return JsonConvert.DeserializeObject<Response<T>>(body);
+                    }
+                }
+                else
+                {
+                    body = "";
+                    return Response<T>.error(-1, "http error code: " + response.StatusCode);
+                }
+            }
+            catch (Exception e)
+            {
+                body = "";
                 return Response<T>.error(-1, "http error code: " + e.Message);
 
             }

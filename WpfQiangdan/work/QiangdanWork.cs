@@ -17,14 +17,26 @@ namespace WpfQiangdan.work
         {
             if (user == null) return null;
             if (String.IsNullOrWhiteSpace(user.account)) return null;
-            if (String.IsNullOrWhiteSpace(user.token)) return null;
-
-            return new TaskLooper(DbValue.loopDelay,user.account, () =>
+            if (String.IsNullOrWhiteSpace(user.token))
             {
-                if (NetWork.generateOrderBy(user))
+                user.state = 2;
+                user.message = "TOKEN 为空";
+                return null;
+            }
+
+            return new TaskLooper(DbValue.loopDelay, user.account, () =>
+            {
+                int code = NetWork.generateOrderBy(user);
+                if (code == 0)
                 {
                     user.state = 1;
                     user.isCheck = false;
+                    stop(user.account);
+                }
+                else if (code == 401)
+                {
+                    user.state = 2;
+                    user.message = "401";
                     stop(user.account);
                 }
             });
@@ -69,6 +81,16 @@ namespace WpfQiangdan.work
                             item.state = -1;
                         }
                     }
+                    else if (item.state == 0 || item.state == 2)
+                    {
+                        TaskLooper taskLooper;
+                        taskMap.TryGetValue(item.account, out taskLooper);
+                        if (taskLooper != null)
+                        {
+                            taskLooper.execute();
+                            item.state = -1;
+                        }
+                    }
                 }
             });
 
@@ -81,7 +103,7 @@ namespace WpfQiangdan.work
             {
                 foreach (User item in users)
                 {
-                    if (taskMap.ContainsKey(item.account)&&item.state==-1)
+                    if (taskMap.ContainsKey(item.account) && item.state == -1)
                     {
                         try
                         {
@@ -94,7 +116,8 @@ namespace WpfQiangdan.work
                                 item.state = 2;
                             }
                         }
-                        catch { 
+                        catch
+                        {
                         }
                     }
                 }
