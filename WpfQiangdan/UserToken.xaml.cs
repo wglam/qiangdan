@@ -74,7 +74,7 @@ namespace WpfQiangdan
                 userListView.ItemsSource = DbValue.getUsersObservable();
 
             }));
-         
+
         }
 
 
@@ -137,6 +137,23 @@ namespace WpfQiangdan
         private void queryWork_Click(object sender, RoutedEventArgs e)
         {
             NetWork.getPersonalDatas(DbValue.getCheckedUser(true));
+        }
+
+        private void orderPng_Click(object sender, RoutedEventArgs e)
+        {
+            System.Windows.Forms.FolderBrowserDialog dialog = new System.Windows.Forms.FolderBrowserDialog();
+            dialog.Description = "请选择文件夹";
+            if (dialog.ShowDialog() == System.Windows.Forms.DialogResult.OK)
+            {
+                if (string.IsNullOrEmpty(dialog.SelectedPath))
+                {
+                    System.Windows.MessageBox.Show("文件夹路径不能为空", "提示");
+                    return;
+                }
+
+                NetWork.generateOrderPngs(dialog.SelectedPath, DbValue.getCheckedUser(false));
+
+            }
         }
     }
 }

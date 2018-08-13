@@ -30,11 +30,14 @@ namespace WpfQiangdan
             InitializeComponent();
 
             listView.MouseDoubleClick += listView_MouseDoubleClick;
+            onsalelist.MouseDoubleClick += onsalelist_MouseDoubleClick;
 
-            Bmob.auth(Bmob.bmob_admin, () => {
-             Dispatcher.Invoke(()=> {
-                  Application.Current.Shutdown();
-              });
+            Bmob.auth(Bmob.bmob_admin, () =>
+            {
+                Dispatcher.Invoke(() =>
+                {
+                    Application.Current.Shutdown();
+                });
             });
 
         }
@@ -45,15 +48,35 @@ namespace WpfQiangdan
             if (item == null) return;
             string content = item.title + "   [  " + item.gbid + "  ]  ";
             MessageBoxResult result = MessageBox.Show(this, content, item.title, MessageBoxButton.OKCancel);
-            if (result == MessageBoxResult.OK) {
+            if (result == MessageBoxResult.OK)
+            {
                 NetWork.groupbuyinfo(item.gbid, new GoodCall(idLabel));
             }
 
         }
 
+        private void onsalelist_MouseDoubleClick(object sender, MouseButtonEventArgs e)
+        {
+            GoodItem item = onsalelist.SelectedItem as GoodItem;
+            if (item == null) return;
+            string content = item.title + "   [  " + item.gbid + "  ]  ";
+            MessageBoxResult result = MessageBox.Show(this, content, item.title, MessageBoxButton.OKCancel);
+            if (result == MessageBoxResult.OK)
+            {
+                this.idLabel.Content = content;
+                DbValue.gbid = item.gbid;
+                DbValue.type = item.type;
+            }
+
+        }
         private void Button_Click_1(object sender, RoutedEventArgs e)
         {
             NetWork.flashsalelist(new GoodsCall(listView));
+        }
+
+        private void Button_Click_2(object sender, RoutedEventArgs e)
+        {
+            NetWork.homepage(new GoodListCall(onsalelist));
         }
 
     }

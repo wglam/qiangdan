@@ -46,7 +46,10 @@ namespace WpfQiangdan.db
                 user.isCheck = true;
             }
         }
-
+        public static void clearAllUser()
+        {
+            users.Clear();
+        }
         public static void checkReverseUser()
         {
             foreach (User user in users.Values)

@@ -13,8 +13,9 @@
             <Button x:Name="startWork" Content="开始" Padding="5" Margin="5"  MinWidth="96" Click="startWork_Click" />
             <Button x:Name="stopWork" Content="停止" Padding="5" Margin="5" MinWidth="96" Click="stopWork_Click"/>
             <Button x:Name="queryWork" Content="查询抢单" Padding="5" Margin="5" MinWidth="96" Click="queryWork_Click" />
+            <Button x:Name="orderPng" Content="导出核销" Padding="5" Margin="5" MinWidth="96" Click="orderPng_Click"  />
             <Label Content="抢单延迟"/>
-            <TextBox x:Name="loopDelay" MinWidth="96"  />
+            <TextBox x:Name="loopDelay" MinWidth="96"  Text="100" />
         </StackPanel>
         <ListView x:Name="userListView" Height="635" >
             <ListView.View>
@@ -37,7 +38,7 @@
                     <GridViewColumn Header="待支付数量" Width="150"  DisplayMemberBinding="{Binding Path=waitPay, Mode=OneWay}"/>
 
                     <GridViewColumn Header="待核销数量"   Width="150" DisplayMemberBinding="{Binding Path=waitConsume, Mode=OneWay}"/>
-                    <GridViewColumn Header=""   Width="150" DisplayMemberBinding="{Binding Path=message, Mode=OneWay}"/>
+                    <GridViewColumn Header="提示消息"   Width="150" DisplayMemberBinding="{Binding Path=message, Mode=OneWay}"/>
                 </GridView>
             </ListView.View>
         </ListView>

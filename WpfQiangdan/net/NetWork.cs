@@ -45,6 +45,61 @@ namespace WpfQiangdan.net
             get(host + "/api/v2/groupbuy/info", param, callback);
         }
 
+        private static GoodItem groupbuyinfo(string gbId)
+        {
+            IDictionary<string, string> param = commonParam();
+            param.Add("gbId", gbId);
+            HttpWebResponse response = Http.post(host + "/api/v2/groupbuy/info", Sign.sign(param));
+            Response<GoodItem> data = jsonHttpWebResponse<GoodItem>(response);
+            return data.data != null ? data.data : groupbuyinfo(gbId);
+        }
+
+        public static void homepage(ICallback<List<GoodItem>> callback)
+        {
+            Task.Run(() =>
+            {
+                IDictionary<string, string> param = commonParam();
+                param.Add("mallNo", "0602B001");
+                HttpWebResponse response = Http.post(host + "/api/v3/homepage", param);
+
+                Response<Home> data = jsonHttpWebResponse<Home>(response);
+                if (data.code == 0)
+                {
+                    Home h = data.data;
+
+                    List<GoodItem> ret = new List<GoodItem>();
+                    if (h.onsalelist != null)
+                    {
+                        string checKey = "mixc://app/groupbuyDetail?gbId=";
+                        foreach (Banner item in h.banners)
+                        {
+                            if (!String.IsNullOrWhiteSpace(item.url) && item.url.StartsWith(checKey))
+                            {
+                                ret.Add(groupbuyinfo(item.url.Replace(checKey, "")));
+                            }
+
+                        }
+                    }
+                    if (h.onsalelist != null)
+                    {
+                        foreach (GoodItem item in h.onsalelist)
+                        {
+                            if (!String.IsNullOrWhiteSpace(item.gbid))
+                            {
+                                ret.Add(groupbuyinfo(item.gbid));
+                            }
+                        }
+                    }
+                    callback.success(0, ret);
+                }
+                else
+                {
+                    callback.fail(-1, data.message);
+                }
+            });
+
+        }
+
         public static void getPersonalDatas(ICollection<User> users)
         {
 
@@ -96,7 +151,7 @@ namespace WpfQiangdan.net
             }
         }
 
-        public static int generateOrderBy(User user)
+        public static Response<object> generateOrderBy(User user)
         {
             try
             {
@@ -119,15 +174,88 @@ namespace WpfQiangdan.net
                 {
                     Bmob.update(body);
                 }
-                return data.code;
+                return data;
             }
-            catch (Exception)
+            catch (Exception e)
             {
-                return -1;
+                return Response<object>.error(-1, e.Message);
             }
         }
 
 
+        public static void generateOrderPngs(string rootPath, ICollection<User> users)
+        {
+            Task.Run(() =>
+             {
+                 foreach (User user in users)
+                 {
+                     generateOrderPng(rootPath, user);
+                 }
+             });
+        }
+        public static void generateOrderPng(string rootPath, User user)
+        {
+            Task.Run(() =>
+            {
+                IDictionary<string, string> param = commonParam();
+
+                param.Add("imei", user.imei);
+                param.Add("mac", user.mac);
+                param.Add("token", user.token);
+                param.Add("mallNo", "0602B001");
+
+                param.Add("pageNum", "1");
+                param.Add("orderType", "2");
+
+                HttpWebResponse response = Http.post(host + "api/v2/order/list", Sign.sign(param));
+                Response<Pager<Order>> data = jsonHttpWebResponse<Pager<Order>>(response);
+                if (data.code == 0)
+                {
+                    List<Order> orderList = data.data.list;
+                    if (orderList != null && orderList.Count >= 1)
+                    {
+                        foreach (Order item in orderList)
+                        {
+                            if (!String.IsNullOrWhiteSpace(item.orderNo)) {
+                                getOrderDetail(rootPath, user, item.orderNo);
+                            }
+                        }
+                    }
+
+                }
+                else if (data.code != 401)
+                {
+                    generateOrderPng(rootPath, user);
+                }
+
+            });
+        }
+
+        private static void getOrderDetail(string rootPath, User user, string orderNo)
+        {
+            IDictionary<string, string> param = commonParam();
+
+            param.Add("imei", user.imei);
+            param.Add("mac", user.mac);
+            param.Add("token", user.token);
+            param.Add("mallNo", "0602B001");
+
+            param.Add("orderNo", orderNo);
+            HttpWebResponse response = Http.post(host + "api/v2/order/detail", Sign.sign(param));
+            Response<Order> data = jsonHttpWebResponse<Order>(response);
+
+            if (data.code == 0)
+            {
+                string path = rootPath + "/" + user.account + "-" + data.data.title + "-" + data.data.consumeInfo.consumeCode + ".jpg";
+                Util.base64ToPng(path, data.data.consumeInfo.consumePic);
+            }
+            else if (data.code != 401)
+            {
+                getOrderDetail(rootPath, user, orderNo);
+            }
+
+
+        }
         /// <summary>
         /// 
         /// </summary>
@@ -144,10 +272,10 @@ namespace WpfQiangdan.net
             return param;
         }
 
-        private static long currentTimeStamp()
+        public static long currentTimeStamp()
         {
             long timeStamp = (DateTime.Now.ToUniversalTime().Ticks - 621355968000000000) / 10000;
-            return timeStamp;
+            return timeStamp + DbValue.dtime;
         }
 
         private static void setCurrentTimeStamp(long serverTime)
@@ -164,6 +292,7 @@ namespace WpfQiangdan.net
                  Response<T> data = jsonHttpWebResponse<T>(response);
                  if (data.code == 0)
                  {
+                     setCurrentTimeStamp(data.timestamp);
                      callback.success(data.code, data.data);
                  }
                  else

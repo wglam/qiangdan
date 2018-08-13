@@ -12,7 +12,7 @@ namespace WpfQiangdan.net
 {
     class Http
     {
-        private static readonly string DefaultUserAgent = "okhttp/3.8.1";
+        private static readonly string DefaultUserAgent = " Mozilla/5.0 (Windows NT 6.1; WOW64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/65.0.3325.146 Safari/537.36";
         private static bool CheckValidationResult(object sender, X509Certificate certificate, X509Chain chain, SslPolicyErrors errors)
         {
             return true; //总是接受     

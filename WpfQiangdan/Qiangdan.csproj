@@ -13,6 +13,7 @@
     <FileAlignment>512</FileAlignment>
     <ProjectTypeGuids>{60dc8134-eba5-43b8-bcc9-bb4bc16c2548};{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}</ProjectTypeGuids>
     <WarningLevel>4</WarningLevel>
+    <IsWebBootstrapper>false</IsWebBootstrapper>
     <PublishUrl>发布\</PublishUrl>
     <Install>true</Install>
     <InstallFrom>Disk</InstallFrom>
@@ -25,7 +26,6 @@
     <MapFileExtensions>true</MapFileExtensions>
     <ApplicationRevision>0</ApplicationRevision>
     <ApplicationVersion>1.0.0.%2a</ApplicationVersion>
-    <IsWebBootstrapper>false</IsWebBootstrapper>
     <UseApplicationTrust>false</UseApplicationTrust>
     <BootstrapperEnabled>true</BootstrapperEnabled>
   </PropertyGroup>
@@ -57,6 +57,7 @@
     <Reference Include="System" />
     <Reference Include="System.Data" />
     <Reference Include="System.Data.Services.Client" />
+    <Reference Include="System.Drawing" />
     <Reference Include="System.Management" />
     <Reference Include="System.Deployment" />
     <Reference Include="System.Printing" />
@@ -150,9 +151,14 @@
     <Compile Include="auth\tools\BmobArrays.cs" />
     <Compile Include="auth\tools\BmobDebug.cs" />
     <Compile Include="auth\tools\Utilities.cs" />
+    <Compile Include="bean\Banner.cs" />
     <Compile Include="bean\GoodItem.cs" />
     <Compile Include="bean\AllGood.cs" />
+    <Compile Include="bean\Home.cs" />
+    <Compile Include="bean\Order.cs" />
     <Compile Include="bean\OrderBubbles.cs" />
+    <Compile Include="bean\OrderConsumeInfo.cs" />
+    <Compile Include="bean\Pager.cs" />
     <Compile Include="bean\PersonalData.cs" />
     <Compile Include="bean\User.cs" />
     <Compile Include="Bmob.cs" />
@@ -162,11 +168,13 @@
     <Compile Include="net\call\GoodsCall.cs" />
     <Compile Include="net\call\LoginCall.cs" />
     <Compile Include="net\call\GoodCall.cs" />
+    <Compile Include="net\call\GoodListCall.cs" />
     <Compile Include="net\Http.cs" />
     <Compile Include="net\ICallback.cs" />
     <Compile Include="net\Sign.cs" />
     <Compile Include="net\NetWork.cs" />
     <Compile Include="net\Response.cs" />
+    <Compile Include="net\Util.cs" />
     <Compile Include="UserToken.xaml.cs">
       <DependentUpon>UserToken.xaml</DependentUpon>
     </Compile>

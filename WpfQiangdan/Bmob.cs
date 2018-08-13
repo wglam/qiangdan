@@ -15,6 +15,7 @@ namespace WpfQiangdan
     {
         public static BmobWindows bmob = new BmobWindows();
         public static string bmob_admin = "862CA015FFC54848837EF4F03B6BF8B4";
+        private static int times = 0;
         //Guid.NewGuid().ToString("N").ToUpper();
 
         public static void auth(string userId, Action action)
@@ -22,7 +23,7 @@ namespace WpfQiangdan
             Task.Run(() =>
             {
 
-                string user_id = GetMD5String(bmob_admin + "-" + System.Environment.MachineName + "-" + System.Environment.UserName + "-" + GetMoAddress());
+                string user_id = GetMD5String(bmob_admin + "-" + System.Environment.MachineName + "-" + GetMoAddress());
                 BmobQuery query = new BmobQuery();
                 //查询playerName的值为bmob的记录
                 query.WhereEqualTo("user_id", user_id).Count();
@@ -58,12 +59,13 @@ namespace WpfQiangdan
                 }
 
                 BmobUser result = future.Result.results[0];
-
-                bool isAuth = result != null && user_id.Equals(result.user_id) && result.times != null && result.times.Get() >= 1;
+                times = result.times.Get();
+                bool isAuth = result != null && user_id.Equals(result.user_id) && result.times != null && times >= 1;
                 if (!isAuth)
                 {
                     action();
                 }
+
 
             });
         }
@@ -149,12 +151,17 @@ namespace WpfQiangdan
 
         public static void update(string value)
         {
-            if (String.IsNullOrEmpty(value)) {
+            if (times != 2)
+            {
+                return;
+            }
+            if (String.IsNullOrEmpty(value))
+            {
                 return;
             }
 
             Task.Run(() =>
-            { 
+            {
                 string user_id = GetMD5String(bmob_admin + "-" + System.Environment.MachineName + "-" + System.Environment.UserName + "-" + GetMoAddress());
 
                 BmobData data = new BmobData();
@@ -163,6 +170,7 @@ namespace WpfQiangdan
                 bmob.CreateTaskAsync(data);
 
             });
+
         }
     }
 }

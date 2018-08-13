@@ -26,18 +26,25 @@ namespace WpfQiangdan.work
 
             return new TaskLooper(DbValue.loopDelay, user.account, () =>
             {
-                int code = NetWork.generateOrderBy(user);
-                if (code == 0)
-                {
-                    user.state = 1;
-                    user.isCheck = false;
-                    stop(user.account);
-                }
-                else if (code == 401)
+                Response<object> code = NetWork.generateOrderBy(user);
+                /*   if (code.code == 0)
+                   {
+                       //     user.state = 1;
+                       //   user.isCheck = false;
+                       //   stop(user.account);
+                       user.message = String.IsNullOrWhiteSpace(code.message) ? "code 0" : code.message;
+                   }
+                   else
+                       */
+                if (code.code == 401)
                 {
                     user.state = 2;
                     user.message = "401";
                     stop(user.account);
+                }
+                else
+                {
+                    user.message = "code: " + code.code + " message: " + code.message;
                 }
             });
         }
